@@ -79,7 +79,7 @@ class DataGeneratorSimCLR(data_utils.Sequence):
             if self.force_image_shape:
               dim = (self.height, self.width, self.channels)
               img = cv.resize(img, dim, interpolation = cv2.INTER_AREA)
-            img = 
+              
             img = tf.convert_to_tensor(
                 np.asarray((img / 255)).astype("float32")
             )
