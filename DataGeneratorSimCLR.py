@@ -77,8 +77,8 @@ class DataGeneratorSimCLR(data_utils.Sequence):
             img = cv.cvtColor(cv.imread(filename), cv.COLOR_BGR2RGB)
 
             if self.force_image_shape:
-              dim = (self.height, self.width, self.channels)
-              img = cv.resize(img, dim, interpolation = cv2.INTER_AREA)
+              dim = (self.height, self.width)
+              img = cv.resize(img, dim, interpolation=cv.INTER_AREA)
               
             img = tf.convert_to_tensor(
                 np.asarray((img / 255)).astype("float32")
