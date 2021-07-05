@@ -19,7 +19,9 @@ class DataGeneratorSimCLR(data_utils.Sequence):
         info={},
         width=80,
         height=80,
+        channels: int = 3,
         VGG=False,
+        force_image_shape: bool = False
     ):
         super().__init__()
         self.df = df
@@ -30,8 +32,10 @@ class DataGeneratorSimCLR(data_utils.Sequence):
         self.info = info
         self.width = width
         self.height = height
+        self.channels = channels
         self.VGG = VGG
         self.on_epoch_end()
+        self.force_image_shape = force_image_shape
 
     def __len__(self):
         return int(np.ceil(len(self.df) / float(self.batch_size)))
@@ -72,6 +76,10 @@ class DataGeneratorSimCLR(data_utils.Sequence):
             self.info[index * self.batch_size + i] = filename
             img = cv.cvtColor(cv.imread(filename), cv.COLOR_BGR2RGB)
 
+            if self.force_image_shape:
+              dim = (self.height, self.width, self.channels)
+              img = cv.resize(img, dim, interpolation = cv2.INTER_AREA)
+            img = 
             img = tf.convert_to_tensor(
                 np.asarray((img / 255)).astype("float32")
             )
