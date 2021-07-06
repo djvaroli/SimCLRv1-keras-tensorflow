@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 
 import tensorflow as tf
-from keras.applications.vgg16 import preprocess_input
+from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.python.keras.utils import data_utils
 
 from SimCLR_data_util import *
