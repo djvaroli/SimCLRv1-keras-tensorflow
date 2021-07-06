@@ -62,6 +62,7 @@ class SimCLR:
         self.soft_cos_sim = SoftmaxCosineSim(
             batch_size=self.batch_size, feat_dim=self.feat_dim
         )
+
         # Projection head
         self.ph_l = []
         for j in range(self.num_layers_ph):
@@ -86,6 +87,7 @@ class SimCLR:
 
         for layer in self.base_model.layers[: -self.num_of_unfrozen_layers]:
             layer.trainable = False
+
         for layer in self.base_model.layers[-self.num_of_unfrozen_layers :]:
             layer.trainable = True
 
@@ -101,7 +103,7 @@ class SimCLR:
         ph_l = []
         for j in range(self.num_layers_ph):
             ph_l.append(self.ph_l[j])
-
+        
         for index in range(2 * self.batch_size):
             i.append(Input(shape=self.input_sh))
             f_x.append(base_model(i[index]))

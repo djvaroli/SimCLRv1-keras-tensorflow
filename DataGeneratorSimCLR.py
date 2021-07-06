@@ -41,7 +41,7 @@ class DataGeneratorSimCLR(data_utils.Sequence):
         self.force_image_shape = force_image_shape
 
         assert self.DenseNet ^ self.VGG, "Cannot set both VGG and DenseNet to true"
-        
+
     def __len__(self):
         return int(np.ceil(len(self.df) / float(self.batch_size)))
 
@@ -134,4 +134,4 @@ class DataGeneratorSimCLR(data_utils.Sequence):
 
         # [None] is used to silence warning
         # https://stackoverflow.com/questions/59317919/warningtensorflowsample-weight-modes-were-coerced-from-to
-        return list(X), y, [None]
+        return list(X), y
