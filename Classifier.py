@@ -8,7 +8,7 @@ from tensorflow.keras.callbacks import (
     EarlyStopping,
     ReduceLROnPlateau,
 )
-from keras.utils.layer_utils import count_params
+from tensorflow.python.keras.utils.layer_utils import count_params
 from sklearn.metrics import classification_report
 import numpy as np
 
