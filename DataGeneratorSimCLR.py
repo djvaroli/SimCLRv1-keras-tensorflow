@@ -2,7 +2,8 @@ import numpy as np
 import cv2 as cv
 
 import tensorflow as tf
-from tensorflow.keras.applications.vgg16 import preprocess_input
+from tensorflow.keras.applications.vgg16 import preprocess_input as preprocess_input_vgg
+from tensorflow.keras.applications.densenet import preprocess_input as preprocess_input_densenet
 from tensorflow.python.keras.utils import data_utils
 
 from SimCLR_data_util import *
@@ -20,7 +21,8 @@ class DataGeneratorSimCLR(data_utils.Sequence):
         width=80,
         height=80,
         channels: int = 3,
-        VGG=False,
+        VGG: bool = False,
+        DenseNet: bool = False,
         force_image_shape: bool = False
     ):
         super().__init__()
@@ -34,9 +36,12 @@ class DataGeneratorSimCLR(data_utils.Sequence):
         self.height = height
         self.channels = channels
         self.VGG = VGG
+        self.DenseNet = DenseNet
         self.on_epoch_end()
         self.force_image_shape = force_image_shape
 
+        assert self.DenseNet ^ self.VGG, "Cannot set both VGG and DenseNet to true"
+        
     def __len__(self):
         return int(np.ceil(len(self.df) / float(self.batch_size)))
 
@@ -106,8 +111,14 @@ class DataGeneratorSimCLR(data_utils.Sequence):
             if self.VGG:
                 img_T1 = tf.dtypes.cast(img_T1 * 255, tf.int32)
                 img_T2 = tf.dtypes.cast(img_T2 * 255, tf.int32)
-                img_T1 = preprocess_input(np.asarray(img_T1))
-                img_T2 = preprocess_input(np.asarray(img_T2))
+                img_T1 = preprocess_input_vgg(np.asarray(img_T1))
+                img_T2 = preprocess_input_vgg(np.asarray(img_T2))
+            
+            if self.DenseNet:
+                img_T1 = tf.dtypes.cast(img_T1 * 255, tf.int32)
+                img_T2 = tf.dtypes.cast(img_T2 * 255, tf.int32)
+                img_T1 = preprocess_input_densenet(np.asarray(img_T1))
+                img_T2 = preprocess_input_densenet(np.asarray(img_T2))
 
             # T1-images between 0 -> batch_size - 1
             X[shuffle_a[i]] = img_T1
